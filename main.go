@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -29,6 +30,18 @@ func main() {
 	}
 
 	connectDB()
+
+	app.Get("/ping", func(c *fiber.Ctx) error {
+		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+		defer cancel()
+
+		err := mongoClient.Ping(ctx, nil)
+		if err != nil {
+			return c.Status(500).SendString("Erro ao pingar o MongoDB")
+		}
+
+		return c.SendString("Ping bem-sucedido no MongoDB")
+	})
 
 	log.Fatal(app.Listen("0.0.0.0:" + port))
 
