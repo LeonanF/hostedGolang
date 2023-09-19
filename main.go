@@ -28,8 +28,6 @@ func main() {
 		port = "3000"
 	}
 
-	connectDB()
-
 	log.Fatal(app.Listen("0.0.0.0:" + port))
 
 }
