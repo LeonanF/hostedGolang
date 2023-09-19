@@ -48,6 +48,7 @@ func main() {
 }
 
 func connectDB() {
+	//
 	mongodbURI := os.Getenv("MONGODB_URI")
 
 	// Primeiro é criado um cliente MongoDB e usado o método Connect para conectar-se ao banco de dados.
