@@ -37,17 +37,22 @@ func main() {
 func connectDB() {
 	mongodbURI := os.Getenv("MONGODB_URI")
 
-	//Primeiro é criado um cliente MongoDB, e usada a função Connect para conectar com o banco de dados
-	//É fornecido um contexto de fundo neutro, e configurado a URI de conexão (com a váriavel criada acima)
-	//Devido à importância da conexão com o BD, se ocorrer algum erro, o programa inteiro é encerrado
+	// Primeiro é criado um cliente MongoDB e usado o método Connect para conectar-se ao banco de dados.
+	// É fornecido um contexto de fundo neutro e configurada a URI de conexão (com a variável criada acima).
 	client, err := mongo.Connect(context.Background(), options.Client().ApplyURI(mongodbURI))
 	if err != nil {
 		panic(err)
 	}
 
-	//O cliente criado é atribuído à váriavel global para que outras partes do código possam acessar e executar operações no banco de dados
+	// Teste de conexão com o MongoDB
+	err = client.Ping(context.Background(), nil)
+	if err != nil {
+		panic("Erro ao conectar ao MongoDB: " + err.Error())
+	}
+
+	// O cliente criado é atribuído à variável global para que outras partes do código possam acessar e executar operações no banco de dados.
 	mongoClient = client
 
-	//É especificada a coleção de documentos a ser trabalhado em cima.
+	// É especificada a coleção de documentos a ser trabalhada em cima.
 	collection = client.Database("rolegourmet").Collection("produtos")
 }
